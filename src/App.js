@@ -4,17 +4,25 @@ import { useState,createContext } from 'react';
 import { Home } from './Pages/Home';
 import { Menu } from './Pages/Menu';
 import { Contact } from './Pages/Contact';
+import { QueryClient,QueryClientProvider } from 'react-query';
 
 
 export const AppContext = createContext()
 
 function App() {
-  
-  const [username,setUsername] = useState('clinton')
+
+  const client = new QueryClient({
+    defaultOptions :{
+      queries: {
+        refetchOnWindowFocus: false,
+        refetchOnMount: false
+      }
+    }
+  })
 
   return (
     <div className="App">
-     <AppContext.Provider value={{username,setUsername}}>
+     <QueryClientProvider client={client}>
       <Router>
         <ul style={{display: 'inline',listStyleType: 'none'}}>
           <li><Link to="/">Home</Link></li>
@@ -27,7 +35,7 @@ function App() {
           <Route path='/menu' element={<Menu />} />
         </Routes>
       </Router>
-     </AppContext.Provider>
+     </QueryClientProvider>
     </div>
   );
 }
